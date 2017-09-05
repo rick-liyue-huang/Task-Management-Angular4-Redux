@@ -1,0 +1,29 @@
+
+<!-- it become angular form -->
+
+<!-- <form #f='ngForm' (ngSubmit)="onSubmit(f, $event)">
+    <md-input-container class="full-width"> -->
+
+      <!-- if add ngModel must add name -->
+      <!-- [(ngModel)]="desc" is same as [ngModel]="desc" (ngModelChange)="desc=$event" -->
+      <!-- <input mdInput type="text" placeholder="create new task" [(ngModel)]="desc" name="desc" required>
+      <button mdSuffix md-icon-button type="button"><md-icon>send</md-icon></button>
+      <md-error>cannot be empty</md-error>
+    </md-input-container>
+</form>
+
+
+<div>
+  Form Data: {{f.value | json}}
+</div>
+
+<div>
+  Form Verify State: {{f.valid | json}}
+</div> -->
+
+<!-- template driven form -->
+<!-- the use the defined template and [(ngModel)] to deal with the data -->
+<md-input-container class="full-width">
+  <input mdInput type="text" placeholder="create new task quickly" [(ngModel)]="desc">
+  <button mdSuffix md-icon-button type="button" (click)="sendQuickTask()"><md-icon>send</md-icon></button>
+</md-input-container>

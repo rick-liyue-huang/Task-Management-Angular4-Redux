@@ -1,0 +1,23 @@
+
+<div>
+  <md-select placeholder="ID Type" 
+            (change)="onIdTypeChange($event.value)"
+            [(ngModel)]="identity.identityTpe">
+            <!-- here [value] = (const val = fc.value) -->
+    <md-option *ngFor="let type of identityTpes" [value]="type.value">
+      {{type.label}}
+    </md-option>
+  </md-select>
+</div>
+
+<div class="id-input">
+  <md-input-container class="full-width">
+    <input mdInput 
+          type="text" 
+          placeholder="ID Number" 
+          (change)="onIdNoChange($event.target.value)"
+          [(ngModel)]="identity.identityNo">
+    <md-error>ID Number is wrong..</md-error>
+  </md-input-container>
+</div>
+

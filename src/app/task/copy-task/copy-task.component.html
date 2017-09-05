@@ -1,0 +1,19 @@
+
+
+<form>
+  <h3 md-diaglog-title>Move List Content</h3>
+  <div md-dialog-content>
+
+    <!-- similar as checkbox and radio -->
+    <md-select placeholder="select target list" class="full-width">
+
+      <!-- lists is injected from data.lists in copy-task.component.ts -->
+      <md-option *ngFor="let list of lists" [value]="list">{{list.name}}</md-option>
+    </md-select>
+  </div>
+
+  <div md-dialog-actions>
+    <button type="button" md-raised-button color="primary" (click)="onClick()">Save</button>
+    <button type="button" md-button md-dialog-close>Close</button>
+  </div>
+</form>

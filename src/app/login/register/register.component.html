@@ -1,0 +1,70 @@
+
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm, $event)">
+
+  <md-card>
+    <md-tab-group>
+      <md-tab label="Account Infomation">
+
+        <md-card-header>
+          <md-card-title>Register: </md-card-title>
+        </md-card-header>
+    
+        <md-card-content>
+          <md-input-container class="full-width">
+            <input mdInput type="text" placeholder="Your email" formControlName="email">
+          </md-input-container>
+          <md-input-container class="full-width">
+            <input mdInput type="text" placeholder="Your name" formControlName="name"> 
+          </md-input-container>
+          <md-input-container class="full-width">
+            <input mdInput type="text" placeholder="input password" formControlName="password">
+          </md-input-container>
+          <md-input-container class="full-width">
+            <input mdInput type="text" placeholder="confirm password" formControlName="confirmpassword">
+          </md-input-container>
+    
+          
+          <!-- used for the avatar -->
+          <!-- <md-grid-list cols="6">
+            <md-grid-tile *ngFor="let item of items">
+              
+              <md-icon class="avatar" [svgIcon]="item"></md-icon>
+            </md-grid-tile>
+          </md-grid-list> -->
+    
+          <!-- will use the image-list-select form -->
+          <app-image-list-select
+            [useSvgIcon]="true"
+            [cols]="6"
+            [title]="'Choose Icon'"
+            [items]="items"
+            formControlName="avatar"></app-image-list-select>
+    
+          <button md-raised-button color="primary" type="submit">Register</button>
+    
+        </md-card-content>
+          
+        <md-card-actions>
+          <p>Have Account?<a href="">Login</a></p>
+          <p>Forget Password? <a href="">Get Back</a></p>
+        </md-card-actions>
+
+
+      </md-tab>
+
+      <md-tab label="Personal Information">
+        <div class="full-width">
+          <app-identity-input formControlName="identity"></app-identity-input>
+        </div>
+        <div class="full-width">
+          <app-age-input formControlName="dateOfBirth"></app-age-input>
+        </div>
+        <div class="full-width">
+          <app-area-list formControlName="address"></app-area-list>
+        </div>
+      </md-tab>
+
+    </md-tab-group>
+  </md-card>
+
+</form>

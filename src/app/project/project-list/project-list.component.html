@@ -1,0 +1,21 @@
+
+
+<!-- if use query animation, I put the project-item in the parent div, and bind the animation with this parent div -->
+<!-- query used to search its children elements and add animation -->
+<div class="container" [@listAnim]="projects.length">
+  
+  <!-- assign the project with input type [item] -->
+  <app-project-item *ngFor="let project of projects" 
+    [item]="project" 
+    class="card"
+    (onInvite)="OpenInviteDialog(project)"
+    (onEdit)="OpenUpdateDialog(project)"
+    (onDelete)="OpenConfirmDialog(project)">
+
+  </app-project-item>
+</div>
+
+
+<button md-fab type="button" (click)="openNewProjectDialog()" class="fab-button">
+  <md-icon>add</md-icon>
+</button>

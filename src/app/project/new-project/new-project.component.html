@@ -1,0 +1,29 @@
+
+<form [formGroup]="newProjectForm" (ngSubmit)="onSubmit(newProjectForm, $event)">
+  <h2 md-diaglog-title>{{title}}</h2>
+
+  <div md-dialog-content>
+    <md-input-container class="full-width">
+      <input mdInput type="text" placeholder="Project Name" formControlName="name">
+    </md-input-container>
+    <md-input-container class="full-width">
+      <input mdInput type="text" placeholder="Project Desciption" formControlName="desc">
+    </md-input-container>
+
+    <!-- reuse the shared component -->
+    <app-image-list-select
+      [useSvgIcon]="false"
+      [cols]="6"
+      [title]="'Choose Cover'"
+      [items]="coverImages"
+      formControlName="coverImg">
+    </app-image-list-select>
+
+  </div>
+  
+
+  <div md-dialog-actions>
+    <button type="submit" md-raised-button color="primary" [disabled]="!newProjectForm.valid">Save</button>
+    <button type="button" md-button md-dialog-close>Close</button>
+  </div>
+</form>

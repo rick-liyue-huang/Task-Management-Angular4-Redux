@@ -1,0 +1,67 @@
+
+
+<!-- model driven form -->
+<!-- use [formGroup] to define the whole form -->
+<!-- (ngSubmit) used for submit the form -->
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm, $event)">
+
+  <md-card>
+        
+    <md-card-header>
+      <md-card-title>Login: </md-card-title>
+    </md-card-header>
+  
+    <md-card-content>
+  
+      <md-input-container color="primary" placeholder="float" hintLabel="required" class="full-width">
+                                                            <!-- similar as name="email" -->
+                                              <!-- used for bind formControlName or email in formbuilder -->
+        <input mdInput type="text" placeholder="Your Email" formControlName="email">
+        <!-- <span mdSuffix>gmail.com</span> -->
+
+        <!-- here will bind with emailNotValid: 'the email must be valid' -->
+        <md-error>{{loginForm.controls['email'].errors | json }}</md-error>
+        
+      </md-input-container>
+  
+      <md-input-container color="primary" placeholder="float" hintLabel="required" class="full-width">
+                                                                    <!-- similar as name="password" -->
+        <input mdInput type="password" placeholder="Your password" formControlName="password">
+      </md-input-container>
+  
+                                            <!-- if the form validators is false, will disable the submit button -->
+      <button md-raised-button type="submit" color="primary" [disabled]="!loginForm.valid">Login</button>
+    </md-card-content>
+  
+    <md-card-actions class="text-right">
+      <p>No Account? <a routerLink="/register">Register</a></p>
+      <p>Forget Password? <a href="">Get Back</a></p>
+    </md-card-actions>
+  
+  </md-card>
+
+  <md-card>
+      
+  <md-card-header>
+    <md-card-title>
+      Recommended Daily Rhesis
+    </md-card-title>
+    <md-card-subtitle>
+      {{quote.en}}  
+      <!-- Do not, for one repulse, forgo the purpose that you resolved to effort.  William Shakespeare -->
+    </md-card-subtitle>
+
+  </md-card-header>
+
+  <img md-card-image [src]="quote.pic" alt="">
+
+  <md-card-content>
+      <!-- This is made by 'md-card' tag imported from '@angular/material'. -->
+      <!-- {{quote.en}} -->
+  </md-card-content>
+
+  
+
+</md-card>
+
+</form>

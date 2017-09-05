@@ -1,0 +1,30 @@
+
+
+<form #f="ngForm" (ngSubmit)="onSubmit($event, f)">
+  <h2 md-diaglog-title>Invite Member:</h2>
+
+  <div md-dialog-content>
+
+    <app-chips-list [label]="'Invite Member'" name="members" [(ngModel)]="members"></app-chips-list>
+
+
+    <!-- <md-input-container class="full-width"> -->
+  
+      <!-- is similar as [mdDatepickerToggle] in new-task component and [mdMenuTriggerFor] in task-header component -->
+      <!-- <input mdInput type="text" placeholder="Member Name" [mdAutocomplete]="autoMembers">
+    </md-input-container> -->
+  </div>
+  
+
+  <div md-dialog-actions>
+    <!-- <button type="submit" md-raised-button color="primary" (click)="onClick()">Save</button> -->
+    <button type="submit" md-raised-button color="primary"[disabled]="!f.valid">Save</button>
+    <button type="button" md-button md-dialog-close>Close</button>
+  </div>
+</form>
+
+<!-- <md-autocomplete #autoMembers="mdAutocomplete" [displayWith]="displayUser">
+  <md-option *ngFor="let item of items" [value]="item">
+    {{item.name}}
+  </md-option>
+</md-autocomplete> -->

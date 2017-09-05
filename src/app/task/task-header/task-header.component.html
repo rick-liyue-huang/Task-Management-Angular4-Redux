@@ -1,0 +1,40 @@
+
+<div md-subheader class="header-container">
+  <div>
+    <!-- import from the task-list component -->
+    <h3>{{header}}</h3>
+  </div>
+  
+  <div class="fill">
+    <button md-button type="button" (click)="onNewTaskClick()">
+      <md-icon>add_circle_outline</md-icon>
+      <span>New Task</span>
+    </button>
+  </div>
+
+  <div>
+    <!-- used for trigger the pop menu -->
+    <!-- is similar as the [mdDatepickerToggle] in new-task component -->
+    <button md-icon-button [mdMenuTriggerFor]="menu">
+      <md-icon>keyboard_arrow_down</md-icon>
+    </button>
+  </div>
+</div>
+
+<!-- link the menu with trigger -->
+<md-menu #menu="mdMenu">
+  <button md-menu-item (click)="onEditListClick()">
+    <md-icon>mode_edit</md-icon>
+    <span>Modify List Name</span>
+  </button>
+
+  <button md-menu-item (click)="onMoveAllClick()">
+    <md-icon svgIcon="move" class="material-icon"></md-icon>
+    <span>Move List Content</span>
+  </button>
+
+  <button md-menu-item (click)="onDeleteListClick()">
+    <md-icon>delete_forever</md-icon>
+    <span>Delete List</span>
+  </button>
+</md-menu>

@@ -1,0 +1,68 @@
+
+.due-date {
+    background-color: lightcoral;
+    color: #fff;
+}
+
+.alarm {
+    font-size: 18px;
+}
+
+.bottom-bar {
+    margin-top: 3px;
+    margin-bottom: 2px;
+    font-size: 10px;
+    width: 100%;
+    order: 1;
+}
+
+.content {
+    order: 1;
+    width: 100%;
+    padding: 5px;
+}
+
+.container {
+    width: 100%;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+:host {
+    width: 100%;
+}
+
+.completion-status {
+    order: -1;
+}
+
+md-icon.avatar {
+    overflow: hidden;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    margin: 12px;
+    order: 3;
+}
+
+.completed {
+    opacity: 0.5;
+    color: lightgray;
+    text-decoration: line-through;
+}
+
+.priority-important {
+    border-left: 3px solid yellow;
+}
+.priority-normal {
+    border-left: 3px solid lightblue;
+}
+.priority-emergency {
+    border-left: 3px solid red;
+}
+
+
+.drag-start {
+    opacity: .5;
+    border: 2px dashed purple;
+}
