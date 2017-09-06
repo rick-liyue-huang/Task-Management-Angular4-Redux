@@ -1,6 +1,6 @@
 
 I am constructing one Angular4 project named Task-Management platform ....
-
+This project continue from 'Task-Management-Angular4' by adding Redux. and is under constructing...
 
 #### Project creatioin process 
 
