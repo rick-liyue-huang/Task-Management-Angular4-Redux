@@ -4,8 +4,8 @@
 // export const QUOTE_FAIL = 'Quote_Fail';
 
 import { Action } from '@ngrx/store';
-import { Quote } from '../domain';
 import { type } from '../utils/type.util';
+import {Quote} from '../domain';
 
 /**
  * For each action type in an action group, make a simple
@@ -27,21 +27,21 @@ export const ActionTypes = {
  * type checking in reducer functions.
  */
 export class LoadAction implements Action {
-    type = ActionTypes.LOAD;
-    // when load something, it will load from server, so no state.payload
-    constructor(public payload:null) { }
+  type = ActionTypes.LOAD;
+    // load means that request to server, so no payload
+  constructor(public payload: null) { }
 }
 
 export class LoadSuccessAction implements Action {
-  type = ActionTypes.LOAD_SUCCESS;
+    type = ActionTypes.LOAD_SUCCESS;
 
-  constructor(public payload:Quote) { }
+    constructor(public payload: Quote) { }
 }
 
 export class LoadFailAction implements Action {
     type = ActionTypes.LOAD_FAIL;
-    // when laod fail, I need the error message 
-    constructor(public payload:string) { }
+    // if fail I prefer to get error message
+    constructor(public payload: string) { }
 }
 
 /**

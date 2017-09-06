@@ -10,8 +10,9 @@ import {Quote} from '../../domain/quote.model';
 import {Observable} from 'rxjs/Observable';
 
 import {Store} from '@ngrx/store';
-import * as fromRoot from '../../reducers';
-import * as actions  from '../../actions/quote.action';
+import * as fromRoot from '../../reducers/index';
+// import * as actions  from '../../actions/quote.action';
+import * as actions from '../../actions/quote.action';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
   // let quote become stream
-  quote$: Observable<Quote>
+  quote$: Observable<Quote>;
 
   // inject the formBuilder
   constructor(
@@ -35,7 +36,7 @@ export class LoginComponent implements OnInit {
     private quoteService$: QuoteService,
     private store$: Store<fromRoot.State>) {
       
-      //2.  store$ can emit the action and also get the state, and will get the new state
+      //22.  store$ can emit the action and also get the state, and will get the new state
       // this.quote$ = this.store$.select(state => state.quote.quote);
       this.quote$ = this.store$.select(fromRoot.getQuote);
 
@@ -46,9 +47,11 @@ export class LoginComponent implements OnInit {
         // .subscribe(q => this.quote = q);
         .subscribe(q => {
           
-          //1. when action is successful, it transfer the info, it will get the new state --- q
+          //11. when action is successful, it transfer the info, it will get the new state --- q
           // this.store$.dispatch({type: actions.QUOTE_SUCCESS, payload: q})
           this.store$.dispatch(new actions.LoadSuccessAction(q));
+          
+          // notice: use reducer will lead to not control the state directly, but control the action under defined.
         });
         
      }

@@ -1083,6 +1083,52 @@ and then import them in the 'register' component
 
 ```
 
+### Add Redux
+
+We have to remember that: 
+here 'store' is both the state origin and the one used for dispatch the actoion.
+'reduce' is the pure action, used for get the different actions and return the different state.
+'action' is info or event, which is deal by reducer and as well the store can get this action to get the new state
+
+I create the reducer and action folders, which are store the actions and reducer files. 
+
+In the 'reducers' folder, the quote.reducer file will deal with quote state and actioin, 'index.ts' is the global reducer and import the 'quote.reducer.ts', and also export the 'store'.
+
+Based on the upon two folders, I modify the login.component.ts file by redux.
+
+```
+constructor(
+    private fb: FormBuilder,
+
+    // this is a event stream, QuoteService is '@Injectable()'.
+    private quoteService$: QuoteService,
+    private store$: Store<fromRoot.State>) {
+      
+      //22.  store$ can emit the action and also get the state, and will get the new state
+      // this.quote$ = this.store$.select(state => state.quote.quote);
+      this.quote$ = this.store$.select(fromRoot.getQuote);
+
+      // it will get the Quote type Observable
+      this.quoteService$
+        .getQuote()
+        // // and then assign the event stream to this.quote
+        // .subscribe(q => this.quote = q);
+        .subscribe(q => {
+          
+          //11. when action is successful, it transfer the info, it will get the new state --- q
+          // this.store$.dispatch({type: actions.QUOTE_SUCCESS, payload: q})
+          this.store$.dispatch(new actions.LoadSuccessAction(q));
+          
+          // notice: use reducer will lead to not control the state directly, but control the action under defined.
+        });
+        
+     }
+```
+
+here, quote$ will effect the login quote part state.
+
+
+
 
 
 

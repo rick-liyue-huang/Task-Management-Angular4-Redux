@@ -19,7 +19,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 // define the service and import
 import {ServicesModule} from '../services/services.module';
 
-import {AppStoreModule} from '../reducers';
+import {AppStoreModule} from '../reducers/';
 
 import '../utils/debug.util';
 
@@ -69,7 +69,8 @@ import 'rxjs/add/operator/do';
     SidebarComponent,
     FooterComponent,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AppStoreModule
   ],
 
   // provides the DI with string value
