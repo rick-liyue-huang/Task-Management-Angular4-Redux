@@ -1127,7 +1127,40 @@ constructor(
 
 here, quote$ will effect the login quote part state.
 
+#### add effects to update login.component
 
+reducer is used for dealing with the state change among UIs, while the effects is used for dealing with the states between UI and outside(server), so I use effect to deal with the 'LOAD' method, which is request data from server.
+
+```
+// effect is one type of Action stream
+    // 1. listen the action$ stream
+    @Effect()
+    // used for filtering the action type
+    // 2. get 'LOAD' action
+    quote$: Observable<Action> = this.actions$
+        .ofType(actions.ActionTypes.LOAD)
+        // deal with this stream.
+        .map(toPayload)
+        // get the service method to get quote
+        // 在处理完一种逻辑后，轻松地转到另外的逻辑上去 ： 获得数据流，然后通过map对另外的逻辑进行操作。
+        .switchMap(_ => this.service$.getQuote()
+        //  if success, load the success action
+        .map(q => new actions.LoadSuccessAction(q))
+        // if fail, load the fail action
+        .catch(err => Observable.of(new actions.LoadFailAction(JSON.stringify(err))))
+    );
+```
+
+here the quote$ is Observable type and it is firslty gotten by the LOAD from server, and then map to the other methods 'LOADSUCCESS' and 'LOADFAIL'.
+
+So, in the 'login.component' I only execute the 
+
+```
+// have to dispatch the 'load' method to load the quote from outside in the intial statge
+      this.store$.dispatch(new actions.LoadAction(null));
+```
+
+to call 'LOAD' action to get the quote, the rest is done by the quote.effect.
 
 
 

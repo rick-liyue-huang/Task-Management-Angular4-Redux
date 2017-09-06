@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "server": "json-server --watch mock/data.json --port 3000",
+    "start": "concurrently \"ng serve --port=4200\" \"npm run server\"",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -48,6 +49,7 @@
     "@types/lodash": "^4.14.74",
     "@types/node": "~6.0.60",
     "codelyzer": "~3.0.1",
+    "concurrently": "^3.5.0",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~1.7.0",

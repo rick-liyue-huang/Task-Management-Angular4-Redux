@@ -4,7 +4,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
 
 // import the service as event stream
-import {QuoteService} from '../../services/quote.service'
+// import {QuoteService} from '../../services/quote.service' // because the effect
 import {Quote} from '../../domain/quote.model';
 
 import {Observable} from 'rxjs/Observable';
@@ -33,13 +33,19 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
 
     // this is a event stream, QuoteService is '@Injectable()'.
-    private quoteService$: QuoteService,
+    // private quoteService$: QuoteService, // delete it because effect
     private store$: Store<fromRoot.State>) {
       
       //22.  store$ can emit the action and also get the state, and will get the new state
       // this.quote$ = this.store$.select(state => state.quote.quote);
       this.quote$ = this.store$.select(fromRoot.getQuote);
+      
+      // have to dispatch the 'load' method to load the quote from outside in the intial statge
+      this.store$.dispatch(new actions.LoadAction(null));
+      
 
+      /*
+      // I do not need this service, because I deal with it in the effects
       // it will get the Quote type Observable
       this.quoteService$
         .getQuote()
@@ -53,6 +59,8 @@ export class LoginComponent implements OnInit {
           
           // notice: use reducer will lead to not control the state directly, but control the action under defined.
         });
+
+        */
         
      }
 

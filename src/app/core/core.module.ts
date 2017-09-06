@@ -20,6 +20,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ServicesModule} from '../services/services.module';
 
 import {AppStoreModule} from '../reducers/';
+import {AppEffectsModule} from '../effects';
 
 import '../utils/debug.util';
 
@@ -56,6 +57,7 @@ import 'rxjs/add/operator/do';
     BrowserAnimationsModule,
     AppRoutingModule,
     AppStoreModule,
+    AppEffectsModule,
     // show the service example
     ServicesModule.forRoot(),
   ],
