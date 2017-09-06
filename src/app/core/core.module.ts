@@ -19,6 +19,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 // define the service and import
 import {ServicesModule} from '../services/services.module';
 
+import {AppStoreModule} from '../reducers';
+
 import '../utils/debug.util';
 
 import 'hammerjs';
@@ -53,8 +55,9 @@ import 'rxjs/add/operator/do';
     SharedModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    AppStoreModule,
     // show the service example
-    ServicesModule.forRoot()
+    ServicesModule.forRoot(),
   ],
   declarations: [
     HeaderComponent, 

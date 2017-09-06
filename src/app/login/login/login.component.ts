@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 // import the forms functions
 import { FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
 
@@ -7,35 +7,50 @@ import { FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
 import {QuoteService} from '../../services/quote.service'
 import {Quote} from '../../domain/quote.model';
 
+import {Observable} from 'rxjs/Observable';
+
+import {Store} from '@ngrx/store';
+import * as fromRoot from '../../reducers';
+import * as actions  from '../../actions/quote.action';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
 
   // bind the [FormGroup]="loginForm" in 'login.component.html'
   loginForm: FormGroup;
 
-  // let q become the Quote type.
-  quote: Quote = {
-    cn: "我们在人生中会作出许多选择，带着这些选择继续生活，才是人生中最难的一课。《妙笔生花》",
-    en: "We all make our choices in life. The hard thing to do is live with them.",
-    pic: "/assets/img/quotes/6.jpg"
-  };
+  // let quote become stream
+  quote$: Observable<Quote>
 
   // inject the formBuilder
   constructor(
     private fb: FormBuilder,
 
     // this is a event stream, QuoteService is '@Injectable()'.
-    private quoteService$: QuoteService) {
+    private quoteService$: QuoteService,
+    private store$: Store<fromRoot.State>) {
+      
+      //2.  store$ can emit the action and also get the state, and will get the new state
+      // this.quote$ = this.store$.select(state => state.quote.quote);
+      this.quote$ = this.store$.select(fromRoot.getQuote);
 
       // it will get the Quote type Observable
       this.quoteService$
         .getQuote()
-        // and then assign the event stream to this.quote
-        .subscribe(q => this.quote = q);
+        // // and then assign the event stream to this.quote
+        // .subscribe(q => this.quote = q);
+        .subscribe(q => {
+          
+          //1. when action is successful, it transfer the info, it will get the new state --- q
+          // this.store$.dispatch({type: actions.QUOTE_SUCCESS, payload: q})
+          this.store$.dispatch(new actions.LoadSuccessAction(q));
+        });
+        
      }
 
   ngOnInit() {

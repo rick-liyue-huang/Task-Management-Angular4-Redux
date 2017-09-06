@@ -47,13 +47,13 @@
       Recommended Daily Rhesis
     </md-card-title>
     <md-card-subtitle>
-      {{quote.en}}  
+      {{(quote$ | async)?.en}}  
       <!-- Do not, for one repulse, forgo the purpose that you resolved to effort.  William Shakespeare -->
     </md-card-subtitle>
 
   </md-card-header>
 
-  <img md-card-image [src]="quote.pic" alt="">
+  <img md-card-image [src]="(quote$ | async)?.pic" alt="">
 
   <md-card-content>
       <!-- This is made by 'md-card' tag imported from '@angular/material'. -->
