@@ -13,23 +13,30 @@ import {storeFreeze} from 'ngrx-store-freeze';
 import {compose} from '@ngrx/core/compose';
 // used for caching the last action
 import {createSelector} from 'reselect';
-import * as fromQuote from './quote.reducer';
 import {environment} from '../../environments/environment';
+
+import * as fromQuote from './quote.reducer';
+import * as fromAuth from './auth.reducer';
+import {Auth} from '../domain';
+
 
 
 // get the local state 
 export interface State {
      quote: fromQuote.State;
+     auth: Auth
 };
 
 // get the local initial state to get the global initialstate
 const initialState: State = {
     quote: fromQuote.initialState,
+    auth: fromAuth.initialState
 };
 
 // get the local reducer
 const reducers = {
     quote: fromQuote.reducer,
+    auth: fromAuth.reducer
 };
 
 // combine the local reducers 
@@ -54,9 +61,11 @@ export function reducer(state = initialState, action: any ): State {
 
 // create method to get the quote reducer
 export const getQuoteState = (state: State) => state.quote;
+export const getAuthState = (state: State) => state.auth
 
 // combine any two funcs, and create one rememable and cacheabl one
 export const getQuote = createSelector(getQuoteState, fromQuote.getQuote);
+
 
 @NgModule({
     imports: [

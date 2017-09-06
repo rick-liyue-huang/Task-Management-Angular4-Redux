@@ -24,7 +24,7 @@ export class AuthService {
     // register --- receive the user and return the auth
     register(user: User): Observable<Auth> {
 
-        user.id = null;
+        // user.id = null;
         const uri = `${this.config.uri}/${this.domain}`;
         return this.http
         //  firstly use get method to get the email, email is th username

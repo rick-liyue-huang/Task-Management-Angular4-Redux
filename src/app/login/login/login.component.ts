@@ -13,6 +13,7 @@ import {Store} from '@ngrx/store';
 import * as fromRoot from '../../reducers/index';
 // import * as actions  from '../../actions/quote.action';
 import * as actions from '../../actions/quote.action';
+import * as authActions from '../../actions/auth.action';
 
 @Component({
   selector: 'app-login',
@@ -78,7 +79,7 @@ export class LoginComponent implements OnInit {
     */
 
     this.loginForm = this.fb.group({
-      email: ['rick@rick.gmail', Validators.compose([Validators.required, Validators.email, this.validate])],
+      email: ['rick@rick.gmail', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.required]
     });
   }
@@ -89,8 +90,12 @@ export class LoginComponent implements OnInit {
 
     ev.preventDefault();
 
-    console.log(JSON.stringify(value));
-    console.log(JSON.stringify(valid));
+    // console.log(JSON.stringify(value));
+    // console.log(JSON.stringify(valid));
+    if (!valid) {
+      return;
+    }
+    this.store$.dispatch(new authActions.LoginAction(value));
 
     /*
     for the conditional validator, it is when some condition satisfied, it will valide some validator.
@@ -99,7 +104,8 @@ export class LoginComponent implements OnInit {
     }
     */
   }
-
+  
+  /*
   // define the validator 
   validate(fc: FormControl): {[key: string]: any} {
     if (!fc.value) {
@@ -115,5 +121,7 @@ export class LoginComponent implements OnInit {
       emailNotValid: 'the email must be valid'
     }
   }
+
+  */
 
 }
