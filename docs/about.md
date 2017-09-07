@@ -1162,6 +1162,80 @@ So, in the 'login.component' I only execute the
 
 to call 'LOAD' action to get the quote, the rest is done by the quote.effect.
 
+#### update the header.component
+
+To link the header with auth,
+```
+......
+
+  auth$: Observable<Auth>;
+
+  constructor(private store$: Store<fromRoot.State>) {
+    this.auth$ = this.store$.select(getAuthState);
+  }
+  ......
+```
+
+#### modify the project-list by reducer and effects
+
+Reducer deal with the state, different action return the different state, here mainly get the state from server, and merge/switch mor concat the state from server and local one, and here reducer affect by action.
+
+Effects cannot change the memory (UI internal) state, but DO interact with server. Here such as update, add, delete and load, but after these methods, the update success/fail, load success/fail, delete success/fail or add success/ fail will execute in the reducer file. Effects also listen the actions, and call the service logic which is defined in project.service. The purpose of effects is to combine(compose) these logic business.
+
+So in the ui component file, it only care what data I will emmit, and which state I get from store.
+
+for example, in the 'project.reducer', it only deal with the delete_success action
+
+```
+......
+case actions.ActionTypes.DELETE_SUCCESS: {
+            return delProject(state, action);
+}
+......
+```
+and in the 'project.effects.ts', it will deal with the delet action, and also combine the delete_success action in 'project.reducer.ts'
+
+```
+......
+@Effect()
+    deleteProject$: Observable<Action> = this.actions$
+        .ofType(actions.ActionTypes.DELETE)
+        .map(toPayload)
+        .switchMap((project) => this.service$.del(project)
+        //  if success, load the success action
+        // it will return the auth type
+        
+        .map(projects => new actions.DeleteSuccessAction(projects))
+        // if fail, load the fail action
+        // it will return error
+        
+        .catch(err => Observable.of(new actions.DeleteFailAction(JSON.stringify(err))))
+    );
+ ......   
+``` 
+
+while these actions methods defined in the 'project.action.ts'.
+
+so, in the 'project-list' component, it only call store and dispatch the actions, but need not care the details of reducer and effect.
+
+```
+......
+dialogRef.afterClosed()
+    // just delete one
+      .take(1)
+      .filter(n => n)
+      .subscribe(_ => {
+        this.store$.dispatch(new actions.DeleteAction(project))
+    });
+......
+```
+
+
+
+
+
+
+
 
 
 

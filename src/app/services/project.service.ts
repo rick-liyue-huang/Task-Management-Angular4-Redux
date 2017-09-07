@@ -1,8 +1,9 @@
 
 import { Injectable, Inject } from '@angular/core';
 import {Http, Headers} from '@angular/http';
-import {Project} from '../domain';
+import {Project, User} from '../domain';
 import {Observable} from 'rxjs/Observable';
+import * as _ from 'lodash';
 
 // it means that it can be inject in the constructor func
 @Injectable()
@@ -72,5 +73,24 @@ export class ProjectService {
         return this.http
             .get(uri, {params: {'members_like': userId}})
             .map(res => res.json() as Project[]);
+    }
+
+    invite(projectId: string, users: User[]): Observable<Project> {
+        // through the project id to get the members[], then concat the members and the invite userid
+        const uri = `${this.config.uri}/${this.domain}/${projectId}`;
+        
+        return this.http
+            .get(uri)
+            .map(res => res.json())
+            // need to patch the members to add the invited user
+            .switchMap((project: Project) => {
+                
+                const existingMembers = project.members;
+                const invitedIds = users.map(user => user.id);
+                const newIds = _.union(existingMembers, invitedIds);
+                return this.http
+                .patch(uri, JSON.stringify({members: newIds }), {headers: this.headers})
+                .map(res => res.json())
+            })
     }
 }

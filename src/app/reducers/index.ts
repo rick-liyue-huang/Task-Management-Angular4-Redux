@@ -4,6 +4,9 @@
 // 'reduce' is the pure action, used for get the different actions and return the different state
 // 'action' is info or event, which is deal by reducer and as well the store can get this action to get the new state
 
+// the global reducer act like the database
+// and each local reducer act like table 
+
 import { NgModule } from '@angular/core';
 import { StoreModule, combineReducers, ActionReducer } from '@ngrx/store';
 import { RouterStoreModule } from '@ngrx/router-store';
@@ -17,6 +20,7 @@ import {environment} from '../../environments/environment';
 
 import * as fromQuote from './quote.reducer';
 import * as fromAuth from './auth.reducer';
+import * as fromProject from './project.reducer';
 import {Auth} from '../domain';
 
 
@@ -24,19 +28,22 @@ import {Auth} from '../domain';
 // get the local state 
 export interface State {
      quote: fromQuote.State;
-     auth: Auth
+     auth: Auth;
+     project: fromProject.State
 };
 
 // get the local initial state to get the global initialstate
 const initialState: State = {
     quote: fromQuote.initialState,
-    auth: fromAuth.initialState
+    auth: fromAuth.initialState,
+    project: fromProject.initialState
 };
 
 // get the local reducer
 const reducers = {
     quote: fromQuote.reducer,
-    auth: fromAuth.reducer
+    auth: fromAuth.reducer,
+    project: fromProject.reducer
 };
 
 // combine the local reducers 
@@ -61,11 +68,12 @@ export function reducer(state = initialState, action: any ): State {
 
 // create method to get the quote reducer
 export const getQuoteState = (state: State) => state.quote;
-export const getAuthState = (state: State) => state.auth
+export const getAuthState = (state: State) => state.auth;
+export const getProjectState = (state: State) => state.project;
 
 // combine any two funcs, and create one rememable and cacheabl one
 export const getQuote = createSelector(getQuoteState, fromQuote.getQuote);
-
+export const getProjects = createSelector(getProjectState, fromProject.getAll);
 
 @NgModule({
     imports: [

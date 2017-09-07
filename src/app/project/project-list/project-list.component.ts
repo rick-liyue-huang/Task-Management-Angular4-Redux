@@ -1,5 +1,13 @@
 
 
+/* 1. project.reducer.ts 
+    2. project.effects.ts
+    3. so in the ui component file, it only care what data I will emmit, 
+    and which state I get from store
+
+
+*/
+
 // for the smart component, need ChangeDetectionStrategy, ChangeDetectorRef to do changedetection
 import { Component, OnInit, HostBinding, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 
@@ -17,6 +25,12 @@ import {ProjectService} from '../../services/project.service';
 import {Subscription} from 'rxjs/Subscription';
 
 import * as _ from 'lodash';
+
+// import the redux info
+import {Store} from '@ngrx/store';
+import * as fromRoot from '../../reducers';
+import {Observable} from 'rxjs/Observable';
+import * as actions from '../../actions/project.action';
 
 @Component({
   selector: 'app-project-list',
@@ -51,32 +65,38 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     }
   ] */
 
-  projects = [];
+  // projects = [];
+  projects$: Observable<Project[]>
 
-  sub: Subscription;
+  // sub: Subscription;
+  listAnim$: Observable<number>
 
   // 1. inject cd: ChangeDetectorRef
   constructor(
     private diaglog: MdDialog, 
     private cd: ChangeDetectorRef,
-    private service$: ProjectService
-  ) { }
+    // private service$: ProjectService
+    private store$: Store<fromRoot.State>
+  ) { 
+    // call loadaction method in effects file
+    this.store$.dispatch(new actions.LoadAction(null));
+    this.projects$ = this.store$.select(fromRoot.getProjects);
+    // get he projects array length
+    this.listAnim$ = this.projects$.map(p => p.length);
+  }
 
   ngOnInit() {
+    /*
     this.sub = this.service$.get("1").subscribe(projects => {
       this.projects = projects;
 
       // if get the data from server end, must do dirty value check. because it use the 
       this.cd.markForCheck();
     });
-    
+    */
   }
 
   ngOnDestroy() {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
-    
   }
 
   // click to open the new project dialog, this dialog is put in the entryComponents.
@@ -100,14 +120,10 @@ export class ProjectListComponent implements OnInit, OnDestroy {
       .map(val => ({...val, coverImg: this.buildImgSrc(val.coverImg)}))
 
       // for each stream, I use add method to create project.
-      .switchMap(v => this.service$.add(v))
       // .subscribe(project => console.log(project));
       .subscribe(project => {
-        // add this project on array.
-        this.projects = [...this.projects, project];
-
-        // must dirty value check.
-        this.cd.markForCheck();
+        // by store dispath to create the new project
+        this.store$.dispatch(new actions.AddAction(project));
       });
   }
 
@@ -134,17 +150,9 @@ export class ProjectListComponent implements OnInit, OnDestroy {
         .filter(n => n)
         
         .map(val => ({...val, id: project.id, coverImg: this.buildImgSrc(val.coverImg)}))
-  
-        // for each stream, I use update method to create project.
-        .switchMap(v => this.service$.update(v))
         // .subscribe(project => console.log(project));
         .subscribe(project => {
-          // add this project on array.
-          const index = this.projects.map(p => p.id).indexOf(project.id);
-          this.projects = [...this.projects.slice(0, index), project, ...this.projects.slice(index + 1)];
-  
-          // must dirty value check.
-          this.cd.markForCheck();
+          this.store$.dispatch(new actions.UpdateAction(project));
       });
   }
 
@@ -154,12 +162,8 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     // just delete one
       .take(1)
       .filter(n => n)
-      .switchMap(_ => this.service$.del(project))
-      .subscribe(prj => {
-      this.projects = this.projects.filter(p => p.id !== prj.id);
-
-      // same as 2.tell the component that only execute this branch by markforcheck
-      this.cd.markForCheck();
+      .subscribe(_ => {
+        this.store$.dispatch(new actions.DeleteAction(project))
     });
   }
 

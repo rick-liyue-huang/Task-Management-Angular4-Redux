@@ -2,10 +2,10 @@
 
 <!-- if use query animation, I put the project-item in the parent div, and bind the animation with this parent div -->
 <!-- query used to search its children elements and add animation -->
-<div class="container" [@listAnim]="projects.length">
+<div class="container" [@listAnim]="listAnim$ | async">
   
   <!-- assign the project with input type [item] -->
-  <app-project-item *ngFor="let project of projects" 
+  <app-project-item *ngFor="let project of (projects$ | async)" 
     [item]="project" 
     class="card"
     (onInvite)="OpenInviteDialog(project)"
