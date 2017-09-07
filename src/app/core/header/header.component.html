@@ -2,7 +2,7 @@
 <md-toolbar color="primary">
 
   <!-- md-icon-button let the button become md-button style -->
-  <button md-icon-button (click)="openSideBar()">
+  <button md-icon-button (click)="openSideBar()" *ngIf="(auth$ | async)?.token">
     <!-- <md-icon>menu</md-icon> -->
     <!-- if I use the svgIcon, it needs the HTTP dependency -->
     <md-icon svgIcon="menu"></md-icon>
@@ -10,4 +10,5 @@
   <span>Task Management Platform</span>
   <span class="fill-remaining-space"></span>
   <md-slide-toggle (change)="onChange($event.checked)">Night Mode</md-slide-toggle>
+  <span><a md-button *ngIf="(auth$ | async)?.token" (click)="logout()">Logout</a></span>
 </md-toolbar>

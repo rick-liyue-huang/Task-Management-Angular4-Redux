@@ -68,7 +68,7 @@ export class RegisterAction implements Action {
   export class LogoutAction implements Action {
     type = ActionTypes.LOGOUT;
     // it bring the auth type
-    constructor(public payload: Auth) { }
+    constructor(public payload: null) { }
 }    
 
 /**
