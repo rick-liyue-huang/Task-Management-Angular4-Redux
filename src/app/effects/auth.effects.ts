@@ -27,8 +27,10 @@ export class AuthEffets {
         // 在处理完一种逻辑后，轻松地转到另外的逻辑上去 ： 获得数据流，然后通过map对另外的逻辑进行操作。
         .switchMap(({email, password}) => this.service$.login(email, password)
         //  if success, load the success action
+        // it will return the auth type
         .map(auth => new actions.LoginSuccessAction(auth))
         // if fail, load the fail action
+        // it will return error
         .catch(err => Observable.of(new actions.LoginFailAction(JSON.stringify(err))))
     );
 
@@ -41,6 +43,7 @@ export class AuthEffets {
         .map(toPayload)
         // get the service method to get quote
         // 在处理完一种逻辑后，轻松地转到另外的逻辑上去 ： 获得数据流，然后通过map对另外的逻辑进行操作。
+        // 对照service的register方法，输入user 返回 auth
         .switchMap((user: User) => this.service$.register(user)
         //  if success, load the success action
         .map(auth => new actions.RegisterSuccessAction(auth))
@@ -57,12 +60,15 @@ export class AuthEffets {
         // if login successful, it will jump to index page
     @Effect()
     loginAndNavigate$: Observable<Action> = this.actions$
+        // here i listen the loginsuccess from the upone method
         .ofType(actions.ActionTypes.LOGIN_SUCCESS)
         // deal with this stream.
+        // 流的拼接
         .map(_ => go(['/projects'])); // route to the index
 
     @Effect()
     registerAndNavigate$: Observable<Action> = this.actions$
+        
         .ofType(actions.ActionTypes.REGISTER_SUCCESS)
         // deal with this stream.
         .map(_ => go(['/projects'])); // route to the index

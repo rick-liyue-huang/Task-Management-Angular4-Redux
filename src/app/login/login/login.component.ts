@@ -95,6 +95,16 @@ export class LoginComponent implements OnInit {
     if (!valid) {
       return;
     }
+
+    /*
+    因为store$ 是用来保存上一次状态和发送动作的，这里当发送动作后会执行loginaction的事件，通过auth.action.ts我们知道
+    loginaction 事件将会发送state 然后返回新的state.在auth.effects.ts里面，我们处理这个loginaction事件，通过事件流的处理
+    map到其他的事件流，如果成功了就执行loginsuccessaction, 否则就执行loginfailaction事件。在 auth.action我们定义了这两个事件，
+    但是具体如何执行都是在action.reducer.ts里面，因为reducer只是涉及到从外面获取状态后，在UI之间的转换。并且我们在auth.effects.ts
+    里面也定义了新的元数据， 用来监听登陆成功和注册成功，因为这里面涉及到页面的请求，所以也将其放入到effects里面。
+    
+    */
+    // it only need value ({email, password})
     this.store$.dispatch(new authActions.LoginAction(value));
 
     /*

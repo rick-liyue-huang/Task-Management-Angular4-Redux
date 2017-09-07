@@ -47,6 +47,22 @@
       "email": "ak@163.com",
       "password": "123456",
       "id": "ryUlfsaFb"
+    },
+    {
+      "email": "aa@aa.com",
+      "password": "1234",
+      "id": "SkW8Wb0YW"
+    },
+    {
+      "email": "bb@bb.com",
+      "name": "bb",
+      "password": "1234",
+      "confirmpassword": "1234",
+      "avatar": "avatars:svg-12",
+      "dateOfBirth": "1990-01-01",
+      "address": null,
+      "identity": null,
+      "id": "HJOTzWCYW"
     }
   ],
   "projects": [

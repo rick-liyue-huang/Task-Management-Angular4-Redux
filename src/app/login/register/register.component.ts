@@ -86,6 +86,17 @@ export class RegisterComponent implements OnInit, OnDestroy {
       return;
     }
     // console.log(value);
+    /* value includes all the elements in the form {
+      email: [],
+      name: [],
+      password: [],
+      confirmpassword: [],
+      avatar: [img],
+      dateOfBirth: ['1990-01-01'],
+
+      address: [],
+      identity: [],
+    } */
     this.store$.dispatch(new authActions.RegisterAction(value));
   }
 

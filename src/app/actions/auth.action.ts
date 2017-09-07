@@ -29,44 +29,45 @@ export const ActionTypes = {
  * type checking in reducer functions.
  */
 export class LoginAction implements Action {
-  type = ActionTypes.REGISTER;
+  type = ActionTypes.LOGIN;
     // load means that request to server, so no payload
+    // when login I should return the email and password 
   constructor(public payload: {email: string, password: string}) { }
 }
 
 export class LoginSuccessAction implements Action {
-    type = ActionTypes.REGISTER_SUCCESS;
-
+    type = ActionTypes.LOGIN_SUCCESS;
+    // when successful it will return auth
     constructor(public payload: Auth) { }
 }
 
 export class LoginFailAction implements Action {
-    type = ActionTypes.REGISTER_FAIL;
+    type = ActionTypes.LOGIN_FAIL;
     // if fail I prefer to get error message
     constructor(public payload: string) { }
 }
 
 export class RegisterAction implements Action {
-    type = ActionTypes.LOGIN;
+    type = ActionTypes.REGISTER;
       // load means that request to server, so no payload
     constructor(public payload: User) { }
   }
   
   export class RegisterSuccessAction implements Action {
-      type = ActionTypes.LOGIN_SUCCESS;
+      type = ActionTypes.REGISTER_SUCCESS;
   
       constructor(public payload: Auth) { }
   }
   
   export class RegisterFailAction implements Action {
-      type = ActionTypes.LOGIN_FAIL;
+      type = ActionTypes.REGISTER_FAIL;
       // if fail I prefer to get error message
       constructor(public payload: string) { }
   }
 
   export class LogoutAction implements Action {
     type = ActionTypes.LOGOUT;
-    // if fail I prefer to get error message
+    // it bring the auth type
     constructor(public payload: Auth) { }
 }    
 

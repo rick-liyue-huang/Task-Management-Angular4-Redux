@@ -10,12 +10,14 @@ export function reducer(state = initialState, action: actions.Actions ): Auth {
         case actions.ActionTypes.LOGIN_SUCCESS:
         case actions.ActionTypes.REGISTER_SUCCESS: {
             return {
-                // return new class state
+                // from the auth.model.ts, login and register both return the auth type, so here 
+                // return new auth type object (state)
                  ...<Auth>action.payload };
         }
 
         case actions.ActionTypes.LOGIN_FAIL:
         case actions.ActionTypes.REGISTER_FAIL: {
+            // when fail return blank
             return initialState;
         }
 
