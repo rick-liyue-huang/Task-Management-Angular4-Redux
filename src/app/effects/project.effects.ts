@@ -114,8 +114,7 @@ export class ProjectEffets {
     @Effect()
     loadTaskLists$: Observable<Action> = this.actions$
         .ofType(actions.ActionTypes.SELECT_PROJECT)
-        .map(toPayload) // deal with the payload(project)
-        // deal with this stream.
+        .map(toPayload) 
         .map(project => new taskListActions.LoadAction(project.id)); // route to the tasklist under project id
     // notice that: the effects stream will effect the reducer stream.
     

@@ -23,7 +23,7 @@
             [header]="list.name" 
             (newTask)="OpenNewTaskDialog()" 
             (moveAll)="OpenCopyTaskDialog()"
-            (deleteList)="OpenConfirmDialog($event)"
+            (deleteList)="OpenConfirmDialog(list)"
             (editList)="OpenEditListDialog(list)">
         </app-task-header>
 

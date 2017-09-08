@@ -40,12 +40,12 @@ export class TaskListService {
             .map(res => res.json());
     }
 
-    del(tasklist: TaskList): Observable<TaskList> {
+    del(taskList: TaskList): Observable<TaskList> {
         
-        const uri = `${this.config.uri}/${this.domain}/${tasklist.id}`
+        const uri = `${this.config.uri}/${this.domain}/${taskList.id}`
 
         return this.http.delete(uri)
-            .mapTo(tasklist);
+            .mapTo(taskList);
     }
 
     //  only delete the project under dedicated user,

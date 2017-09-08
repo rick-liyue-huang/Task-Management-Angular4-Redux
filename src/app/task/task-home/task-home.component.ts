@@ -108,7 +108,6 @@ export class TaskHomeComponent implements OnInit {
   // dialog used to open the dialog component
   constructor(
     private dialog: MdDialog, 
-    private cd: ChangeDetectorRef, 
     private store$: Store<fromRoot.State>,
     private route: ActivatedRoute
     ) { 
@@ -138,14 +137,15 @@ export class TaskHomeComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {data: {title: "Delete List", content: "Are you sure to delete the list?"}});
     dialogRef.afterClosed()
       .take(1)
-      .filter(n => n)
+      .filter(n => n) // only deal with it when the dialog return true
       .subscribe(result => this.store$.dispatch(new actions.DeleteAction(list)));
   }
 
   OpenEditListDialog(list: TaskList) {
     const dialogRef = this.dialog.open(NewTaskListComponent, {data: {title: 'Modify List Name', taskList: list}});
     dialogRef.afterClosed()
-      .take(1)  
+      .take(1) 
+      .filter(n => n) 
       // here result is the value after edit, and need to add id property on this value
       .subscribe(result => this.store$.dispatch(new actions.UpdateAction({...result, id: list.id})));
   }
@@ -155,6 +155,7 @@ export class TaskHomeComponent implements OnInit {
     const dialogRef = this.dialog.open(NewTaskListComponent, {data: {title: 'New Task List'}});
     dialogRef.afterClosed()
       .take(1)
+      .filter(n => n)
       .subscribe(result => this.store$.dispatch(new actions.AddAction(result)));
   }
 

@@ -11,7 +11,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewTaskListComponent implements OnInit {
-  newTaskListForm: FormGroup
+  form: FormGroup;
   title = '';
 
   // this is the common use for dialog component, if need to import the data, using inject, if want to export the data, using dialogRef
@@ -23,12 +23,12 @@ export class NewTaskListComponent implements OnInit {
   ngOnInit() {
     this.title = this.data.title;
 
-    this.newTaskListForm = this.fb.group({
+    this.form = this.fb.group({
       name: [this.data.taskList? this.data.taskList : "", Validators.required]
     });
   }
 
-  onSubmit({value, valid}) {
+  onSubmit({value, valid}, ev:Event) {
     if (!valid) {
       return;
     }

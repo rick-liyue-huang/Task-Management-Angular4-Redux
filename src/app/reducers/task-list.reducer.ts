@@ -11,7 +11,7 @@ import {createSelector} from 'reselect';
 export interface State {
     ids: string[];
     entities: { [id: string]: TaskList };
-    selectedIds: string[] | null;
+    selectedIds: string[];
 };
 
 export const initialState: State = {
@@ -55,7 +55,7 @@ const delTaskList = (state, action) => {
 
 const loadTaskList = (state, action) => {
     const taskLists = action.payload;
-    const incomingIds = taskLists.map(p => p.id);
+    const incomingIds = taskLists.map(tl => tl.id);
     const newIds = _.difference(incomingIds, state.ids);
     
     // transfer to entity
@@ -95,7 +95,7 @@ const selectProject = (state, action) => {
     // 这里state是针对task-list这个页面状态的，因此它是由一系列列表构成的，其中ids就是各个列表的id，
     // 对这些列表过滤，针对每个列表entities[id]如果其projectId属性和携带的项目的id一致就挑选出来。
     // 这里注意，reducer可以监听所有的action,包括其他的project.action.ts里面的action。
-    const selectedIds = state.ids.filter(id => state.entities[id].projectId = selected.id);
+    const selectedIds = state.ids.filter(id => state.entities[id].projectId === selected.id);
     return {
         // 然后我们更新现有的状态将selectedIds 更新，这个用来补充loadTaskList里面的selectedIds的属性更新。
         ...state, selectedIds: selectedIds

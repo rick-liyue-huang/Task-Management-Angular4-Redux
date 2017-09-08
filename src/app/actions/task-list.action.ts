@@ -4,24 +4,24 @@
 
 import { Action } from '@ngrx/store';
 import { type } from '../utils/type.util';
-import {Project, User, TaskList} from '../domain';
+import {Project, TaskList} from '../domain';
 
 export const ActionTypes = {
-  ADD:              type('[TaskList] Add'),
-  ADD_SUCCESS:      type('[TaskList] Add_Success'),
-  ADD_FAIL:         type('[TaskList] Add_Fail'),
+  ADD:                 type('[TaskList] Add'),
+  ADD_SUCCESS:         type('[TaskList] Add_Success'),
+  ADD_FAIL:            type('[TaskList] Add_Fail'),
   UPDATE:              type('[TaskList] Update'),
   UPDATE_SUCCESS:      type('[TaskList] Update_Success'),
   UPDATE_FAIL:         type('[TaskList] Update_Fail'),
   DELETE:              type('[TaskList] Delete'),
   DELETE_SUCCESS:      type('[TaskList] Delete_Success'),
   DELETE_FAIL:         type('[TaskList] Delete_Fail'),
-  LOAD:              type('[TaskList] Load'),
-  LOAD_SUCCESS:      type('[TaskList] Load_Success'),
-  LOAD_FAIL:         type('[TaskList] Load_Fail'),
-  SWAP:              type('[TaskList] Swap'),
-  SWAP_SUCCESS:              type('[TaskList] Swap_Success'),
-  SWAP_FAIL:              type('[TaskList] Swap_Fail')
+  LOAD:                type('[TaskList] Load'),
+  LOAD_SUCCESS:        type('[TaskList] Load_Success'),
+  LOAD_FAIL:           type('[TaskList] Load_Fail'),
+  SWAP:                type('[TaskList] Swap'),
+  SWAP_SUCCESS:        type('[TaskList] Swap_Success'),
+  SWAP_FAIL:           type('[TaskList] Swap_Fail')
 };
 
 

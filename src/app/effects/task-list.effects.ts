@@ -1,17 +1,4 @@
 
-
-/* 1. ... in project.reducer.ts
-2. effects cannot change the memory (UI internal) state, but DO interact with server 
-here such as update, add, delete and load, but after these methods, the update success/fail, load success/fail,
-delete success/fail or add success/ fail will execute in the reducer file.
-
-Effects also listen the actions, and call the service logic which is defined in project.service.
-The purpose of effects is to combine(compose) these logic business.
-
-3... in project-list.component.ts
-*/
-
-
 // effect is another reducer, I hope to deal with the effect and reducer by the action stream
 import { Injectable } from '@angular/core';
 import {Actions, toPayload, Effect} from '@ngrx/effects';
@@ -40,11 +27,11 @@ export class TaskListEffets {
         .switchMap((projectId) => this.service$.get(projectId)
         //  if success, load the success action
         // if success, get the tasklists array
-        .map(taskLists => new actions.LoadSuccessAction(taskLists))
+            .map(taskLists => new actions.LoadSuccessAction(taskLists))
         // if fail, load the fail action
         // it will return error
         // 否则就是发送一个错误信息
-        .catch(err => Observable.of(new actions.LoadFailAction(JSON.stringify(err))))
+            .catch(err => Observable.of(new actions.LoadFailAction(JSON.stringify(err))))
     );
 
     @Effect()

@@ -1,7 +1,7 @@
 
 
 
-<form [formGroup]="newTaskListForm" (ngSubmit)="onSubmit(newTaskListForm, $event)">
+<form [formGroup]="form" (ngSubmit)="onSubmit(form, $event)">
   <h3 md-diaglog-title>{{title}}</h3>
   <div md-dialog-content>
 
@@ -12,7 +12,7 @@
   </div>
 
   <div md-dialog-actions>
-    <button type="submit" md-raised-button color="primary" [disabled]="!newTaskListForm.valid">Save</button>
+    <button type="submit" md-raised-button color="primary" [disabled]="!form.valid">Save</button>
     <button type="button" md-button md-dialog-close>Close</button>
   </div>
 </form>
