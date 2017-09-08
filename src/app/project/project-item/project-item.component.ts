@@ -27,6 +27,8 @@ export class ProjectItemComponent implements OnInit {
 
   @Output() onDelete = new EventEmitter<void>();
 
+  @Output() onSelected = new EventEmitter<void>();  
+
   // same as [@card]='cardState' in project-item.component.html
   // here will animate the whole component, so use hostbinding
   @HostBinding('@card') cardState = 'out';
@@ -36,16 +38,23 @@ export class ProjectItemComponent implements OnInit {
   ngOnInit() {
   }
 
-  onInviteClick() {
+  onInviteClick(ev: Event) {
+    ev.stopPropagation();
     this.onInvite.emit();
   }
 
-  onEditClick() {
+  onEditClick(ev: Event) {
+    ev.stopPropagation();
     this.onEdit.emit();
   }
 
-  onDeleteClick() {
+  onDeleteClick(ev: Event) {
+    ev.stopPropagation();
     this.onDelete.emit();
+  }
+
+  onClick() {
+    this.onSelected.emit();
   }
 
   // listen the array event to animate

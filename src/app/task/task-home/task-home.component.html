@@ -4,7 +4,7 @@
     
       <app-task-list 
         class="list-container" 
-        *ngFor="let list of lists"
+        *ngFor="let list of lists$ | async"
 
         app-droppable
         [dropTags]="['task-item', 'task-list']"
@@ -23,8 +23,8 @@
             [header]="list.name" 
             (newTask)="OpenNewTaskDialog()" 
             (moveAll)="OpenCopyTaskDialog()"
-            (deleteList)="OpenConfirmDialog()"
-            (editList)="OpenEditListDialog()">
+            (deleteList)="OpenConfirmDialog($event)"
+            (editList)="OpenEditListDialog(list)">
         </app-task-header>
 
         <app-quick-task (quickTask)="handleQuickTask($event)"></app-quick-task>
@@ -38,6 +38,6 @@
       </app-task-list>
     </div>
     
-    <button md-fab class="fab-button" type="button" (click)="OpenNewListDialog()">
+    <button md-fab class="fab-button" type="button" (click)="OpenNewListDialog($event)">
       <md-icon>add</md-icon>
     </button>

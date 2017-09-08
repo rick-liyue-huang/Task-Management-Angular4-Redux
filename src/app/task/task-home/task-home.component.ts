@@ -6,6 +6,13 @@ import {CopyTaskComponent} from '../copy-task/copy-task.component';
 import {ConfirmDialogComponent} from '../../shared/confirm-dialog/confirm-dialog.component';
 import {NewTaskListComponent} from '../new-task-list/new-task-list.component';
 import {routerAnimation} from '../../animation/router.animation';
+import {ActivatedRoute} from '@angular/router';
+
+import {Store} from '@ngrx/store';
+import * as fromRoot from '../../reducers';
+import {Observable} from 'rxjs/Observable';
+import * as actions from '../../actions/task-list.action';
+import {TaskList} from '../../domain';
 
 @Component({
   selector: 'app-task-home',
@@ -17,9 +24,11 @@ import {routerAnimation} from '../../animation/router.animation';
 
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+
 export class TaskHomeComponent implements OnInit {
 
-  lists = [
+ /* lists = [
     {
       id: 1,
       name: 'READY',
@@ -86,13 +95,28 @@ export class TaskHomeComponent implements OnInit {
         
       ]
     }
-  ]
+  ] */
+
+
 
   // binding the router animation with the whole component.
   @HostBinding('@routerAnim') state;
 
+  projectId$: Observable<string>;
+  lists$: Observable<TaskList[]>;
+
   // dialog used to open the dialog component
-  constructor(private dialog: MdDialog, private cd: ChangeDetectorRef) { }
+  constructor(
+    private dialog: MdDialog, 
+    private cd: ChangeDetectorRef, 
+    private store$: Store<fromRoot.State>,
+    private route: ActivatedRoute
+    ) { 
+      // get the route parameters Observable type
+      //  match { path: 'tasklists/:id', component: TaskHomeComponent }
+      this.projectId$ = this.route.paramMap.pluck('id');
+      this.lists$ = this.store$.select(fromRoot.getTaskLists);
+    }
 
   ngOnInit() {
   }
@@ -103,27 +127,35 @@ export class TaskHomeComponent implements OnInit {
 
   OpenCopyTaskDialog() {
     // this click event is transmit from the task-header, and will send the data to CopyTaskComponent.
-    const dialogRef =  this.dialog.open(CopyTaskComponent, {data: {lists: this.lists}});
+    // const dialogRef =  this.dialog.open(CopyTaskComponent, {data: {lists: this.lists}});
   }
 
   OpenUpdateTaskDialog(task) {
     const dialogRef = this.dialog.open(NewTaskComponent, {data: {title: 'Modify Task', task: task}})
   }
 
-  OpenConfirmDialog() {
+  OpenConfirmDialog(list: TaskList) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {data: {title: "Delete List", content: "Are you sure to delete the list?"}});
-    dialogRef.afterClosed().subscribe(result => console.log(result));
+    dialogRef.afterClosed()
+      .take(1)
+      .filter(n => n)
+      .subscribe(result => this.store$.dispatch(new actions.DeleteAction(list)));
   }
 
-  OpenEditListDialog() {
-    const dialogRef = this.dialog.open(NewTaskListComponent, {data: {title: 'Modify List Name'}});
-    dialogRef.afterClosed().subscribe(result => console.log(result));
+  OpenEditListDialog(list: TaskList) {
+    const dialogRef = this.dialog.open(NewTaskListComponent, {data: {title: 'Modify List Name', taskList: list}});
+    dialogRef.afterClosed()
+      .take(1)  
+      // here result is the value after edit, and need to add id property on this value
+      .subscribe(result => this.store$.dispatch(new actions.UpdateAction({...result, id: list.id})));
   }
 
-  OpenNewListDialog() {
+  OpenNewListDialog(ev: Event) {
     // will transfer the data.
     const dialogRef = this.dialog.open(NewTaskListComponent, {data: {title: 'New Task List'}});
-    dialogRef.afterClosed().subscribe(result => console.log(result));
+    dialogRef.afterClosed()
+      .take(1)
+      .subscribe(result => this.store$.dispatch(new actions.AddAction(result)));
   }
 
   handleMove(srcData, list) {

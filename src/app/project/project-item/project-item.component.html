@@ -1,5 +1,5 @@
 
-<md-card>
+<md-card (click)="onClick()">
   <md-card-header>
     <md-card-title>
       {{item.name}}
@@ -11,15 +11,15 @@
     {{item.desc}}
   </md-card-content>
   <md-card-actions>
-    <button md-button type="button" (click)="onEditClick()">
+    <button md-button type="button" (click)="onEditClick($event)">
       <md-icon>note</md-icon>
       <span>Edit</span>
     </button>
-    <button md-button type="button" (click)="onInviteClick()">
+    <button md-button type="button" (click)="onInviteClick($event)">
       <md-icon>group_add</md-icon>
       <span>Invite</span>
     </button>
-    <button md-button type="button" (click)="onDeleteClick()">
+    <button md-button type="button" (click)="onDeleteClick($event)">
       <md-icon>delete</md-icon>
       <span>Delete</span>
     </button>

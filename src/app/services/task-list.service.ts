@@ -19,7 +19,7 @@ export class TaskListService {
     // define the returned thing is the event stream (Observable type), so I can deal with these results as event stream
     add(tasklist: TaskList): Observable<TaskList> {
         
-        tasklist.id = null;
+        // tasklist.id = null;
         const uri = `${this.config.uri}/${this.domain}`;
         return this.http
             .post(uri, JSON.stringify(tasklist), {headers: this.headers})
@@ -42,7 +42,7 @@ export class TaskListService {
 
     del(tasklist: TaskList): Observable<TaskList> {
         
-        const uri = `${this.config.uri}/tasklists/${tasklist.id}`
+        const uri = `${this.config.uri}/${this.domain}/${tasklist.id}`
 
         return this.http.delete(uri)
             .mapTo(tasklist);
@@ -59,7 +59,7 @@ export class TaskListService {
     }
 
     // switch the lists order
-    swapOrder1(src: TaskList, target: TaskList): Observable<TaskList[]> {
+    swapOrder(src: TaskList, target: TaskList): Observable<TaskList[]> {
 
         // the srouce list uri
         const dragUri = `${this.config.uri}/${this.domain}/${src.id}`;

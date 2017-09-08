@@ -1,18 +1,18 @@
 
 
 
-<form>
+<form [formGroup]="newTaskListForm" (ngSubmit)="onSubmit(newTaskListForm, $event)">
   <h3 md-diaglog-title>{{title}}</h3>
   <div md-dialog-content>
 
     <md-input-container class="full-width">
-      <input type="text" mdInput placeholder="List Name">
+      <input type="text" mdInput placeholder="List Name" formControlName="name">
     </md-input-container>
     
   </div>
 
   <div md-dialog-actions>
-    <button type="button" md-raised-button color="primary" (click)="onClick()">Save</button>
+    <button type="submit" md-raised-button color="primary" [disabled]="!newTaskListForm.valid">Save</button>
     <button type="button" md-button md-dialog-close>Close</button>
   </div>
 </form>

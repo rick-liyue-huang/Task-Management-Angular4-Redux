@@ -1,6 +1,6 @@
 
 // reducer can listen all the actions
-
+// 这里的tasklist.reducer包括了所有的tasklist层面的状态信息
 
 import * as actions from '../actions/task-list.action';
 import * as projectActions from '../actions/project.action';
@@ -76,6 +76,7 @@ const swapTaskLists = (state, action) => {
     const taskLists = <TaskList[]>action.payload;
     // here ids neednot change, just change entities
     // get the entity object
+    // here only change the order property of the tasklist
     const updateEntities = _.chain(taskLists)
         .keyBy('id')
         .mapValues(o => o)
@@ -91,8 +92,12 @@ const selectProject = (state, action) => {
     // here action bring 'project'
     const selected = <Project>action.payload;
     // here I filter the tasklist with projectId equal to selected.projectId
+    // 这里state是针对task-list这个页面状态的，因此它是由一系列列表构成的，其中ids就是各个列表的id，
+    // 对这些列表过滤，针对每个列表entities[id]如果其projectId属性和携带的项目的id一致就挑选出来。
+    // 这里注意，reducer可以监听所有的action,包括其他的project.action.ts里面的action。
     const selectedIds = state.ids.filter(id => state.entities[id].projectId = selected.id);
     return {
+        // 然后我们更新现有的状态将selectedIds 更新，这个用来补充loadTaskList里面的selectedIds的属性更新。
         ...state, selectedIds: selectedIds
     }
 }
@@ -101,12 +106,14 @@ const deleteListByProject = (state, action) => {
     const project = <Project>action.payload;
     const taskListIds = project.taskLists;
     // 所谓的删除就是将不同的留下来，相同的去掉
+    // 因为这里面包含了所有的tasklist, get all the different ones
     const remainingIds = _.difference(state.ids, taskListIds);
     // 从数组 到 对象， 用reduce构造字典对象
+    // by reduce, get the id of remainingIds, and construct the entities by the id: entity
     const remainingEntities = remainingIds.reduce((entities, id) => ({...entities, [id]: state.entities[id]}), {});
-    // 重新生成写的对象
+    // get the new state
     return {
-        ids: [...remainingIds],
+        ids: [...remainingIds], // this is the new id array
         entities: remainingEntities,
         selectedIds: []
     };    

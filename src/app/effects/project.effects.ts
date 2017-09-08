@@ -18,6 +18,7 @@ import {Observable} from 'rxjs/Observable';
 import {Action, Store} from '@ngrx/store';
 import {go} from '@ngrx/router-store';
 import * as actions from '../actions/project.action';
+import * as taskListActions from '../actions/task-list.action';
 import {AuthService} from '../services/auth.service';
 import {ProjectService} from '../services/project.service';
 import {User} from '../domain';
@@ -40,7 +41,6 @@ export class ProjectEffets {
         // 得到当前用户的认证状态
         .withLatestFrom(this.store$.select(fromRoot.getAuthState))
 
-        // get the service method to get quote
         // 在处理完一种逻辑后，轻松地转到另外的逻辑上去 ： 获得数据流，然后通过map对另外的逻辑进行操作。
         // 这时候将得到两个信息，_是payload， 我们不用关心，另外一个是auth是上面的步骤来的，我们要得到他的auth id
         .switchMap(([_, auth]) => this.service$.get(auth.userId)
@@ -56,11 +56,11 @@ export class ProjectEffets {
 
     @Effect()
     addProject$: Observable<Action> = this.actions$
-        .ofType(actions.ActionTypes.ADD)
+        .ofType(actions.ActionTypes.ADD) // listen the ADD action
 
-        .map(toPayload)
+        .map(toPayload) //notice the payload
         .withLatestFrom(this.store$.select(fromRoot.getAuthState))
-        // here I have to care the payload, so can not use "_"
+        // here I have to care the payload, so can not use "_", but the action.payload = project  
         .switchMap(([project, auth]) => {
             // 展开project添加一个members, 这样auth就变为project的成员之一
             const added = {...project, members: [`${auth.userId}`]};
@@ -105,15 +105,24 @@ export class ProjectEffets {
     @Effect()
     selectProject$: Observable<Action> = this.actions$
         .ofType(actions.ActionTypes.SELECT_PROJECT)
-        .map(toPayload)
+        .map(toPayload) // deal with the payload(project)
         // deal with this stream.
         .map(project => go([`/tasklists/${project.id}`])); // route to the tasklist under project id
+    // notice that: the effects stream will effect the reducer stream.
+
+
+    @Effect()
+    loadTaskLists$: Observable<Action> = this.actions$
+        .ofType(actions.ActionTypes.SELECT_PROJECT)
+        .map(toPayload) // deal with the payload(project)
+        // deal with this stream.
+        .map(project => new taskListActions.LoadAction(project.id)); // route to the tasklist under project id
     // notice that: the effects stream will effect the reducer stream.
     
     @Effect()
     invite$: Observable<Action> = this.actions$
         .ofType(actions.ActionTypes.INVITE)
-        .map(toPayload)
+        .map(toPayload)  // match payload: {projectId: string, members: User[]}
         .switchMap(({projectId, members}) => this.service$.invite(projectId, members)
         //  if success, load the success action
         // it will return the auth type

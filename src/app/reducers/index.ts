@@ -21,29 +21,33 @@ import {environment} from '../../environments/environment';
 import * as fromQuote from './quote.reducer';
 import * as fromAuth from './auth.reducer';
 import * as fromProject from './project.reducer';
+import * as fromTaskList from './task-list.reducer';
 import {Auth} from '../domain';
 
 
 
-// get the local state 
+// get the local state to create the whole State
 export interface State {
      quote: fromQuote.State;
      auth: Auth;
-     project: fromProject.State
+     project: fromProject.State;
+     taskLists: fromTaskList.State
 };
 
 // get the local initial state to get the global initialstate
 const initialState: State = {
     quote: fromQuote.initialState,
     auth: fromAuth.initialState,
-    project: fromProject.initialState
+    project: fromProject.initialState,
+    taskLists: fromTaskList.initialState
 };
 
-// get the local reducer
+// get the local reducers to create the whole reducers
 const reducers = {
     quote: fromQuote.reducer,
     auth: fromAuth.reducer,
-    project: fromProject.reducer
+    project: fromProject.reducer,
+    taskLists: fromTaskList.reducer
 };
 
 // combine the local reducers 
@@ -70,10 +74,12 @@ export function reducer(state = initialState, action: any ): State {
 export const getQuoteState = (state: State) => state.quote;
 export const getAuthState = (state: State) => state.auth;
 export const getProjectState = (state: State) => state.project;
+export const getTaskListState = (state: State) => state.taskLists;
 
 // combine any two funcs, and create one rememable and cacheabl one
 export const getQuote = createSelector(getQuoteState, fromQuote.getQuote);
 export const getProjects = createSelector(getProjectState, fromProject.getAll);
+export const getTaskLists = createSelector(getTaskListState, fromTaskList.getSelected);
 
 @NgModule({
     imports: [

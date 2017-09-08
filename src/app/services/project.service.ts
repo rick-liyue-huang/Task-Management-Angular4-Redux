@@ -74,7 +74,8 @@ export class ProjectService {
             .get(uri, {params: {'members_like': userId}})
             .map(res => res.json() as Project[]);
     }
-
+    
+    // users is the will add user
     invite(projectId: string, users: User[]): Observable<Project> {
         // through the project id to get the members[], then concat the members and the invite userid
         const uri = `${this.config.uri}/${this.domain}/${projectId}`;
@@ -84,10 +85,11 @@ export class ProjectService {
             .map(res => res.json())
             // need to patch the members to add the invited user
             .switchMap((project: Project) => {
-                
+                // the existing memebers
                 const existingMembers = project.members;
+                // 被邀请人的id是 被传进来的users id
                 const invitedIds = users.map(user => user.id);
-                const newIds = _.union(existingMembers, invitedIds);
+                const newIds = _.union(existingMembers, invitedIds); // concat together
                 return this.http
                 .patch(uri, JSON.stringify({members: newIds }), {headers: this.headers})
                 .map(res => res.json())

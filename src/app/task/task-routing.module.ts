@@ -5,7 +5,8 @@ import { CommonModule } from '@angular/common';
 import {TaskHomeComponent} from './task-home/task-home.component';
 
 const routes: Routes = [
-    { path: 'tasklists', component: TaskHomeComponent }
+    // to match the task-home.component.ts 'this.projectId$ = this.route.paramMap.pluck('id');'
+    { path: 'tasklists/:id', component: TaskHomeComponent }
 ];
 
 @NgModule({
