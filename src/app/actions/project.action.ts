@@ -14,22 +14,22 @@ import {Project, User} from '../domain';
  * action types in the application are unique. 
  */
 export const ActionTypes = {
-  ADD:              type('[Project] Add'),
-  ADD_SUCCESS:      type('[Project] Add_Success'),
-  ADD_FAIL:         type('[Project] Add_Fail'),
+  ADD:                 type('[Project] Add'),
+  ADD_SUCCESS:         type('[Project] Add_Success'),
+  ADD_FAIL:            type('[Project] Add_Fail'),
   UPDATE:              type('[Project] Update'),
   UPDATE_SUCCESS:      type('[Project] Update_Success'),
   UPDATE_FAIL:         type('[Project] Update_Fail'),
   DELETE:              type('[Project] Delete'),
   DELETE_SUCCESS:      type('[Project] Delete_Success'),
   DELETE_FAIL:         type('[Project] Delete_Fail'),
-  LOAD:              type('[Project] Load'),
-  LOAD_SUCCESS:      type('[Project] Load_Success'),
-  LOAD_FAIL:         type('[Project] Load_Fail'),
+  LOAD:                type('[Project] Load'),
+  LOAD_SUCCESS:        type('[Project] Load_Success'),
+  LOAD_FAIL:           type('[Project] Load_Fail'),
   INVITE:              type('[Project] Invite'),
-  INVITE_SUCCESS:              type('[Project] Invite_Success'),
-  INVITE_FAIL:              type('[Project] Invite_Fail'),
-  SELECT_PROJECT:              type('[Project] Select_Project')
+  INVITE_SUCCESS:      type('[Project] Invite_Success'),
+  INVITE_FAIL:         type('[Project] Invite_Fail'),
+  SELECT_PROJECT:      type('[Project] Select_Project')
 };
 
 /**
@@ -39,14 +39,13 @@ export const ActionTypes = {
  */
 export class AddAction implements Action {
   type = ActionTypes.ADD;
-    // load means that request to server, so no payload
-    // when login I should return the email and password 
+    // here action.payload bring the project wanted to add.
   constructor(public payload: Project) { }
 }
 
 export class AddSuccessAction implements Action {
     type = ActionTypes.ADD_SUCCESS;
-    // when successful it will return auth
+    // when successful it will return project by action.payload
     constructor(public payload: Project) { }
 }
 
@@ -58,13 +57,13 @@ export class AddFailAction implements Action {
 
 export class UpdateAction implements Action {
     type = ActionTypes.UPDATE;
-      // load means that request to server, so no payload
+    // when update, I will bring the project by action.payload
     constructor(public payload: Project) { }
   }
   
   export class UpdateSuccessAction implements Action {
       type = ActionTypes.UPDATE_SUCCESS;
-  
+      // when successful, it retun the project by action.payload
       constructor(public payload: Project) { }
   }
   
@@ -74,9 +73,10 @@ export class UpdateAction implements Action {
       constructor(public payload: string) { }
   }
 
+  // delete project as as add and update
   export class DeleteAction implements Action {
     type = ActionTypes.DELETE;
-      // load means that request to server, so no payload
+      
     constructor(public payload: Project) { }
   }
   
@@ -91,7 +91,8 @@ export class UpdateAction implements Action {
       // if fail I prefer to get error message
       constructor(public payload: string) { }
   }
-
+  
+  // for the client, if I requet to load object page, I donot need bring project info
   export class LoadAction implements Action {
     type = ActionTypes.LOAD;
       // load means that request to server, so no payload
@@ -100,7 +101,7 @@ export class UpdateAction implements Action {
   
   export class LoadSuccessAction implements Action {
       type = ActionTypes.LOAD_SUCCESS;
-  
+      // if successful, it will load the project page including series of prjects
       constructor(public payload: Project[]) { }
   }
   
@@ -110,15 +111,18 @@ export class UpdateAction implements Action {
       constructor(public payload: string) { }
   }
 
+  // its little difference, it need to invite member to add this project, it need the projectId
+  // and the the existing members array, 
+  // 因为如果需要邀请组员，必须知道现有项目的的id,以及这些项目的现有成员列表
   export class InviteAction implements Action {
     type = ActionTypes.INVITE;
-      // load means that request to server, so no payload
+      
     constructor(public payload: {projectId: string, members: User[]}) { }
   }
   
   export class InviteSuccessAction implements Action {
       type = ActionTypes.INVITE_SUCCESS;
-  
+      // return the project type by action.payload, becauese It will include the new members list.
       constructor(public payload: Project) { }
   }
   
@@ -130,7 +134,7 @@ export class UpdateAction implements Action {
   
   export class SelectProjectAction implements Action {
     type = ActionTypes.SELECT_PROJECT;
-  
+    // means that it will bring one project in action.payload
     constructor(public payload: Project) { }
   }
 
