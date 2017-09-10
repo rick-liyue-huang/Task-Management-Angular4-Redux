@@ -5,6 +5,8 @@ import {QuoteEffets} from './quote.effects';
 import {AuthEffets} from './auth.effects';
 import {ProjectEffets} from './project.effects';
 import {TaskListEffets} from './task-list.effects';
+import {TaskEffets} from './task.effects';
+import {UserEffets} from './user.effects';
 
 @NgModule({
     imports: [
@@ -12,7 +14,9 @@ import {TaskListEffets} from './task-list.effects';
         EffectsModule.run(QuoteEffets),
         EffectsModule.run(AuthEffets),
         EffectsModule.run(ProjectEffets),
-        EffectsModule.run(TaskListEffets)
+        EffectsModule.run(TaskListEffets),
+        EffectsModule.run(UserEffets),
+        EffectsModule.run(TaskEffets)
     ]
 })
 export class AppEffectsModule {}

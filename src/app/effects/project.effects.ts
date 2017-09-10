@@ -18,10 +18,11 @@ import {Observable} from 'rxjs/Observable';
 import {Action, Store} from '@ngrx/store';
 import {go} from '@ngrx/router-store';
 import * as actions from '../actions/project.action';
+import * as userActions from '../actions/user.action';
 import * as taskListActions from '../actions/task-list.action';
 import {AuthService} from '../services/auth.service';
 import {ProjectService} from '../services/project.service';
-import {User} from '../domain';
+import {User, Project} from '../domain';
 import * as fromRoot from '../reducers';
 
 @Injectable()
@@ -59,11 +60,11 @@ export class ProjectEffets {
         .ofType(actions.ActionTypes.ADD) // listen the ADD action
 
         .map(toPayload) //notice the payload
-        .withLatestFrom(this.store$.select(fromRoot.getAuthState))
+        .withLatestFrom(this.store$.select(fromRoot.getAuthState).map(auth => auth.user))
         // here I have to care the payload, so can not use "_", but the action.payload = project  
-        .switchMap(([project, auth]) => {
+        .switchMap(([project, user]) => {
             // 展开project添加一个members, 这样auth就变为project的成员之一
-            const added = {...project, members: [`${auth.userId}`]};
+            const added = {...project, members: [`${user.id}`]};
             // 然后将这个新的成员加入到service里面
             return this.service$.add(added)
             // 返回一个project
@@ -132,6 +133,43 @@ export class ProjectEffets {
         // 否则就是发送一个错误信息
         .catch(err => Observable.of(new actions.InviteFailAction(JSON.stringify(err))))
     );
+
+    // 在这里触发
+    @Effect()
+    loadUsers$: Observable<Action> = this.actions$
+        .ofType(actions.ActionTypes.LOAD_SUCCESS)
+        .map(toPayload)  // match payload: {projectId: string, members: User[]}
+        .switchMap((projects: Project[]) => Observable.from(projects.map(prj => prj.id))
+        .map(projectId => new userActions.LoadAction(projectId))
+    );
+
+    @Effect()
+    addUserProjects$: Observable<Action> = this.actions$
+        .ofType(actions.ActionTypes.ADD_SUCCESS)
+        .map(toPayload)  // match payload: {projectId: string, members: User[]}
+        .map(project => project.id)
+        // 到当前的用户
+        .withLatestFrom(this.store$.select(fromRoot.getAuthState).map(auth => auth.user), (projectId, user) => {
+            return new userActions.AddAction({user: user, projectId: projectId})
+        }
+    );
+
+    @Effect()
+    removeUserProjects$: Observable<Action> = this.actions$
+        .ofType(actions.ActionTypes.DELETE_SUCCESS)
+        .map(toPayload)  // match payload: {projectId: string, members: User[]}
+        .map(project => project.id)
+        // 到当前的用户
+        .withLatestFrom(this.store$.select(fromRoot.getAuthState).map(auth => auth.user), (projectId, user) => {
+            return new userActions.DeleteAction({user: user, projectId: projectId})
+        }
+    );
+
+    @Effect()
+    updateUserProject$: Observable<Action> = this.actions$
+        .ofType(actions.ActionTypes.INVITE_SUCCESS)
+        .map(toPayload)  // match payload: {projectId: string, members: User[]}
+        .map(project => new userActions.UpdateAction(project));
 
     constructor(
         private actions$: Actions, 

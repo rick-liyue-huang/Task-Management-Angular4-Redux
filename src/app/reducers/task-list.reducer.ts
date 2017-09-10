@@ -27,11 +27,17 @@ const addTaskList = (state, action) => {
         return state;
     }
     // 将原来的数组展开，放入新的元素，返回新的数组
-    const ids = [...state.ids, taskList.id];
+    const newIds = [...state.ids, taskList.id];
     // 将原来的字典的对象打散，加入新的对象，然后得到新的字典， 字典就是key:object
     const newEntities = {...state.entities, [taskList.id]: taskList};
+    const newSelectedIds = [...state.selectedIds, taskList.id];
     // 将原有的state打散，然后将新的id 和 字典放进去，得到新的
-    return {...state, ids: ids, entities: newEntities};
+    // return {...state, ids: ids, entities: newEntities};
+    return {
+        ids: newIds,
+        entities: newEntities,
+        selectedIds: newSelectedIds
+    };
 }
 
 const updateTaskList  = (state, action) => {
@@ -158,8 +164,8 @@ export const getIds = (state: State) => state.ids;
 export const getEntities = (state: State) => state.entities;
 export const getSelectedIds = (state: State) => state.selectedIds;
 
-export const getSelected = createSelector(getIds, getEntities, (ids, entities) => {
+export const getSelected = createSelector(getSelectedIds, getEntities, (selectedIds, entities) => {
 
     // get the project element array.
-    return ids.map(id => entities[id]);
-})
+    return selectedIds.map(id => entities[id]);
+});
