@@ -1,19 +1,19 @@
 
 
-<form>
+<form [formGroup]="form" (ngSubmit)="onSubmit($event, form)">
   <h3 md-diaglog-title>Move List Content</h3>
   <div md-dialog-content>
 
     <!-- similar as checkbox and radio -->
-    <md-select placeholder="select target list" class="full-width">
+    <md-select placeholder="select target list" class="full-width" formControlName="targetListId">
 
       <!-- lists is injected from data.lists in copy-task.component.ts -->
-      <md-option *ngFor="let list of lists" [value]="list">{{list.name}}</md-option>
+      <md-option *ngFor="let list of lists" [value]="list.id">{{list.name}}</md-option>
     </md-select>
   </div>
 
   <div md-dialog-actions>
-    <button type="button" md-raised-button color="primary" (click)="onClick()">Save</button>
+    <button type="submit" md-raised-button color="primary" [disabled]="!form.valid">Save</button>
     <button type="button" md-button md-dialog-close>Close</button>
   </div>
 </form>
