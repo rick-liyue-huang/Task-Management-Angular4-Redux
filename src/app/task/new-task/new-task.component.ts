@@ -41,15 +41,16 @@ export class NewTaskComponent implements OnInit {
     // console.log(JSON.stringify(this.data.task));
     this.form = this.fb.group({
       desc: [this.data.task ? this.data.task.desc : '', Validators.required],
+      priority: [this.data.task ? this.data.task.priority: 3],
       owner: [this.data.task ? [this.data.task.owner] :[this.data.owner]],
-      followers: [this.data.task ? [this.data.task.participants] : []],
+      followers: [this.data.task ? [this.data.task.participantIds] : []],
       dueDate: [this.data.task ? this.data.task.dueDate : '', Validators.required],
       remind: [this.data.task ? this.data.task.reminder : ''],
       remark: [this.data.task ? this.data.task.remark : '', Validators.required],
     })
   }
 
-  ngSubmit(ev: Event, {value, valid}) {
+  onSubmit(ev: Event, {value, valid}) {
     ev.preventDefault();
     if (!valid) {
       return;

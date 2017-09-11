@@ -44,7 +44,7 @@ export class InviteComponent implements OnInit {
 
   onSubmit(ev: Event, {value, valid}) {
 
-    ev.preventDefault();
+    ev.stopPropagation();
     if (!valid) {
       return;
     }
